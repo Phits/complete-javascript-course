@@ -5,7 +5,7 @@ function calcAge(birthYear) {
 
     function printAge() {
         let output = `${firstName} are ${age}, born in ${birthYear}`;
-        console.log(output);
+        // console.log(output);
        
         if (birthYear >= 1981 && birthYear <= 1996) {
             var millenial = true;
@@ -15,10 +15,10 @@ function calcAge(birthYear) {
 
             // Reassigning outer scope's variable
             output = 'New Output!';
-            console.log(output);
+            // console.log(output);
 
             const str = `Oh, and you're  a millenial, ${firstName}`;
-            console.log(str);
+            // console.log(str);
     
             function add(a, b) {
                 return a + b;
@@ -36,3 +36,50 @@ function calcAge(birthYear) {
 
 const firstName = 'John';
 calcAge(1988);
+
+// Hoisting Variables
+// console.log(me);
+// console.log(job);
+// console.log(year);
+
+var me = 'John';
+let job = 'Developer';
+const year = 1988;
+
+// Hoisting Functions
+// console.log( addDecl(2,3) );
+// console.log( addDecl(2,3) );
+// console.log( addArrow(2,3) );
+
+function addDecl(a,b) {
+    return a + b;
+}
+
+const addExpr = function(a,b) {
+    return a + b;
+}
+
+var addArrow = (a, b) => a + b;
+
+// Example
+// console.log(numberOfProducts);
+
+if (!numberOfProducts) deleteShoppingCart();
+
+var numberOfProducts = 10;
+
+function deleteShoppingCart() {
+    // console.log('All products deleted')
+}
+
+var x = 1;
+let y = 2;
+const z = 3;
+
+console.log(x === window.x);
+console.log(y === window.y);
+console.log(x === window.z);
+
+
+
+
