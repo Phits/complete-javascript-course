@@ -114,7 +114,7 @@ const unitedair = {
     bookings: [],
     // book: function() {}
     book(flight, name) {
-        console.log(`${name} booked a seat on ${this.airline} flight ${flight}`);
+        // console.log(`${name} booked a seat on ${this.airline} flight ${flight}`);
         this.bookings.push({flight: `${this.iataCode} ${flightNum}, ${name}`});
     },
 };
@@ -135,10 +135,10 @@ const book = unitedair.book;
 
 // Call Method
 book.call(americanair, 23, 'Sarah Williams');
-console.log(americanair);
+// console.log(americanair);
 
 book.call(unitedair, 239, 'Mary Cooper');
-console.log(unitedair);
+// console.log(unitedair);
 
 const swiss = {
     airline: 'Swiss Airlines',
@@ -147,12 +147,12 @@ const swiss = {
 }
 
 book.call(swiss, 444, 'Mary Cooper');
-console.log(swiss);
+// console.log(swiss);
 
 // Apply Method
 const flightData = [583, 'George Cooper'];
 book.apply(swiss, flightData);
-console.log(swiss);
+// console.log(swiss);
 
 // Spread Operator
 book.call(swiss, ...flightData);
@@ -174,10 +174,10 @@ bookUA23('James Edwards');
 // With Event Listeners
 unitedair.planes = 300;
 unitedair.buyPlane = function() {
-    console.log(this);
+    // console.log(this);
 
     this.planes++;
-    console.log(this.planes);
+    // console.log(this.planes);
 };
 // this.undefined.buyPlane();
 
@@ -186,18 +186,18 @@ document.querySelector('.buy').addEventListener('click', unitedair.buyPlane.bind
 // Partial Application
 
 const addTax = (rate, value) => value + value * rate;
-console.log(addTax(0.1, 200));
+// console.log(addTax(0.1, 200));
 
 const addVAT = addTax.bind(null, 0.23);
 // addVat = value + value * rate;
 
-console.log(addVAT(100));
-console.log(addVAT(300));
+// console.log(addVAT(100));
+// console.log(addVAT(300));
 
 // Challenge
 const taxes = function(tax) {
     return function(cost) {
-        console.log(tax * cost + cost);
+        // console.log(tax * cost + cost);
     }
 }
 
@@ -206,3 +206,102 @@ costTax(100);
 costTax(1000);
 
 taxes(0.1)(50);
+
+
+// Immediately Invoked Function Expressions (IIFE)
+// const runOnce = function() {
+//     console.log('This will never run again');
+// }
+// runOnce();
+
+// IIFE
+(function() {
+    // console.log('This will never run again');
+    const isPrivate = 23;
+})();
+
+// console.log(isPrivate);
+
+// (() =>  console.log('This will never run again'))
+// ();
+
+{
+    const isPrivateTwo = 23;
+    var notPrivate = 46;
+}
+// console.log(notPrivate);
+
+// Closures
+const secureBooking = function() {
+    let passengerCount = 0;
+
+    return function() {
+        passengerCount++;
+        // console.log(`${passengerCount} passengers`)
+    }
+}
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker();
+
+// console.dir(booker);
+
+// More Closures
+// Example #1
+let f;
+
+const g = function() {
+    const a = 23;
+    f = function() {
+        // console.log(a * 2);
+    };
+};
+
+const h = function() {
+    const b = 777;
+    f = function() {
+        // console.log(b * 2);
+    };
+}
+
+g();
+f();
+
+// Re-assigned f function
+h();
+f();
+// console.dir(f);
+
+// Example #2
+const boardPassengers = function(n, wait) {
+    const perGroup = n / 3;
+
+    setTimeout(function(){
+        console.log(`We are now boaring all ${n} passengers`);
+        console.log(`There are 3 groups with ${perGroup} in each group`);
+    }, wait * 1000);
+
+    console.log(`Will start boarding in ${wait} seconds`);
+}
+
+// setTimeout(function(){
+//     console.log('Timer');
+// }, 1000);
+
+// Closer priority over scope chain.
+const perGroup = 1000;
+boardPassengers(180, 3);
+
+// Challenge 2
+// IIEF
+(function () {
+    const header = document.querySelector('h1');
+    header.style.color = 'red';
+  
+    document.querySelector('body').addEventListener('click', function () {
+      header.style.color = 'blue';
+    }, false);
+  })();
