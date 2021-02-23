@@ -27,8 +27,8 @@ const jack = new Person('Jack', 1985);
 // console.log(john instanceof Person);
 
 Person.hey = function() {
-    console.log(`Hey there `);
-    console.log(this);
+    // console.log(`Hey there `);
+    // console.log(this);
 }
 Person.hey();
 
@@ -82,7 +82,8 @@ Array.prototype.unique = function() {
 const h1 = document.querySelector('h1');
 // console.dir(x => x + 1);
 
-// Challenge
+//////////////////////////////////////////////////
+// Challenge 1
 const Car = function(make, speed) {
     this.make = make;
     this.speed = speed;
@@ -120,6 +121,7 @@ tesla.accelerate();
 // class expression
 // const PersonCL = class {}
 
+//////////////////////////////////////////////////////////////
 // Class declaration
 class PersonCL {
     constructor(fullName, birthYear) {
@@ -130,11 +132,11 @@ class PersonCL {
     // Instance Methods
     // Methods will be added to .prototype property
     calcAge() {
-        console.log(2021 - this.birthYear);
+        // console.log(2021 - this.birthYear);
     }
 
     greet() {
-        console.log(`Hey ${this.fullName}!`);
+        // console.log(`Hey ${this.fullName}!`);
     }
 
     get age() {
@@ -143,7 +145,7 @@ class PersonCL {
 
     // Set a property that already exists
     set fullName(name) {
-        console.log(name);
+        // console.log(name);
         if(name.includes(' ')) this._fullName = name;
         else alert(`${name} is not a full name`);
     }
@@ -154,14 +156,14 @@ class PersonCL {
 
     // Static method (not inherited)
     static hey() {
-        console.log('Hey there');
+        // console.log('Hey there');
     } 
 }
 
 const jessica = new PersonCL('Jessica Davis', 1996);
-// console.log(jessica);
+console.log(jessica);
 jessica.calcAge();
-console.log(`age set ${jessica.age}`);
+// console.log(`age set ${jessica.age}`);
 
 // console.log(jessica.__proto__ == PersonCL.prototype);
 
@@ -175,6 +177,7 @@ jessica.greet();
 // 2. Classes are first class citizens (Can be passed into functions and return functions)
 // 3. Body of a class is executed in strict mode
 
+/////////////////////////////////////////////////
 // Getters and Setters (accessor properties)
 
 const walter = new PersonCL('Walter White', 1965);
@@ -194,15 +197,15 @@ const account = {
     }
 };
 
-console.log(account.latest);
+// console.log(account.latest);
 
 account.latest = 50;
-console.log(account.movements);
+// console.log(account.movements);
 
-// Objects.create least used way to create prototype inheritence
+// Objects.create, least used way to create prototype inheritence
 const PersonProto = {
     calcAge() {
-        console.log(2021 - this.birthYear);
+        // console.log(2021 - this.birthYear);
     },
 
     inti(firstName, birthYear) {
@@ -212,15 +215,58 @@ const PersonProto = {
 };
 
 const steven = Object.create(PersonProto);
-console.log(steven);
+// console.log(steven);
 // Do use this 
 steven.name = 'Steven';
 steven.birthYear = 2002;
 steven.calcAge();
 
-console.log(steven.__proto__);
+// console.log(steven.__proto__);
 
 const sarah = Object.create(PersonProto);
 sarah.inti('Sarah', 1979);
 sarah.calcAge();
+
+//////////////////////////////////////////
+// Challenge #2
+class CarCl {
+    constructor(make, speed) {
+        this.make = make;
+        this.speed = speed;
+   }
+
+   accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is speeding up at ${this.speed} km/h`);
+   }
+
+   break() {
+    this.speed -= 5;
+    console.log(`${this.make} is slowing down at ${this.speed} km/h`);
+   }
+
+    get speedUs() {
+        return this.speed / 1.6;
+    }
+
+    set speedUs(speed) {
+        this.speed = speed * 1.6;
+    }
+
+}
+
+const ford = new CarCl('Ford', 120);
+console.log(ford);
+console.log('US Speed', ford.speedUs);
+
+ford.accelerate();
+ford.accelerate();
+ford.accelerate();
+ford.break();
+ford.break();
+ford.break();
+ford.speedUs = 50;
+console.log(ford);
+
+
 
