@@ -9,6 +9,10 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const nav = document.querySelector('.nav');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tasbContent = document.querySelectorAll('.operations__content');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -89,13 +93,180 @@ document.querySelector('.nav__links').addEventListener('click', function(e) {
     // Matching Strategy
     if (e.target.classList.contains('nav__link')) {
         const id = e.target.getAttribute('href');
-        console.log(id);
+        // console.log(id);
         document.querySelector(id).scrollIntoView({
           behavior: 'smooth'
         })
-
     }
 });
+
+// Tabbed component
+tabsContainer.addEventListener('click', function(e) {
+  const clicked = e.target.closest('.operations__tab');
+  console.log(clicked);
+
+  // Guard clause (if nothing clicked return);
+  if (!clicked) return;
+
+  // Deactive Tab
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+
+  // Active Tab
+  clicked.classList.add('operations__tab--active');
+
+  
+  // Remove content area
+  // console.log(clicked.dataset.tab);
+  tasbContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  // Activate content area
+  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
+
+});
+
+// Bad practise
+// tabs.forEach(t => t.addEventListener('click', () => {
+//   console.log('TAB');
+// }))
+
+// Menu fade animation
+const handleHover = function(e) {
+  // console.log(this, e.currentTarget);
+
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+}
+
+// Passing "argument" into handler
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
+
+// Sticky navigation listening to scroll (bad performance)
+// const initialCoords = section1.getBoundingClientRect();
+// console.log(initialCoords);
+
+// window.addEventListener('scroll', function(e) {
+//   console.log(window.scrollY);
+
+//   if (window.scrollY > initialCoords.top) nav.classList.add('sticky'); else nav.classList.remove('stick');
+// })
+
+// Sticky navigation: Intersection Observer API
+// const obsCallback = function(entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   })
+// };
+
+// const obsOptions = {
+//   root: null,
+//   threshold: [0, 0.2],
+// };
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1);
+
+// Sticky better performance
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+// console.log(navHeight);
+
+const stickyNav = function(entries) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+}
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+
+headerObserver.observe(header);
+
+// Reveal sections on scroll
+const allSection = document.querySelectorAll('.section');
+
+const revealSection = function(entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+}
+
+const sectionObserver = new IntersectionObserver
+(revealSection, {
+  root: null,
+  threshold: 0.20
+})
+allSection.forEach(function(section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+})
+
+// Lazy loading images
+const imgTargets = document.querySelectorAll('img[data-src]');
+// console.log(imgTargets);
+
+const loadImg = function (entries, observer) {
+ const [entry] = entries;
+//  console.log(entry);
+
+ if (!entry.isIntersecting) return;
+
+ // Replace src with data-src
+ entry.target.src = entry.target.dataset.src;
+
+ entry.target.addEventListener('load', function() {
+   entry.target.classList.remove('lazy-img');
+ })
+
+ observer.unobserve(entry.target);
+}
+
+const imgObserver = new IntersectionObserver(loadImg, 
+  {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px'
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
+
+// Silder
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelectorAll('slider__btn--left');
+const btnRight = document.querySelectorAll('slider__btn--right');
+
+console.log(slides);
+
+const slider = document.querySelector('.slider');
+// slider.style.transform = 'scale(0.4) translateX(-900px)';
+slider.style.overflow = 'visible';
+
+slides.forEach((s, i) => ( s.style.transform = `translateX(${100 * i}%)`) );
+
+btnRight.addEventListener('click', function() {
+  
+})
+
+
+
+
 
 ///////////////////////////////////////////////
 // DOM Transversing
@@ -103,28 +274,29 @@ document.querySelector('.nav__links').addEventListener('click', function(e) {
 const h1 = document.querySelector('h1');
 
 // Going downwards: child
-console.log(h1.querySelectorAll('.highlight'));
-console.log(h1.childNodes);
-console.log(h1.children); // direct children
-h1.firstElementChild.style.color = 'white';
-h1.lastElementChild.style.color = 'orangered';
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.childNodes);
+// console.log(h1.children); // direct children
+// h1.firstElementChild.style.color = 'white';
+// h1.lastElementChild.style.color = 'orangered';
 
 // Going Upwards: parents
-console.log(h1.parentNode);
-console.log(h1.parentElement);
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
 
-h1.closest('.header').style.background = 'var(--gradient-secondary)';
+// h1.closest('.header').style.background = 'var(--gradient-secondary)';
 
-h1.closest('h1').style.background = 'var(--gradient-primary)';
+// h1.closest('h1').style.background = 'var(--gradient-primary)';
 
 // Going sideways: siblings
-console.log(h1.previousElementSibling);
-console.log(h1.nextElementSibling);
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
 
-console.log(h1.previousSibling);
-console.log(h1.nextSibling);
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
 
-console.log(h1.parentElement.children);
+// console.log(h1.parentElement.children);
+
 [...h1.parentElement.children].forEach(function(el) {
   if (el !== h1) el.style.transform = 'scale(0.5';
 });
